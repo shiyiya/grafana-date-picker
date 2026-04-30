@@ -16,14 +16,18 @@
 ## 安装
 
 ```bash
-npm install
+npm install grafana-date-picker
 ```
 
 ## 使用示例
 
 ```tsx
-import { GrafanaDatePicker } from './components/GrafanaDatePicker';
+import { GrafanaDatePicker } from 'grafana-date-picker';
 import dayjs from 'dayjs';
+import { useState } from 'react';
+
+// 导入样式
+import 'grafana-date-picker/style.css';
 
 function App() {
   const [dateRange, setDateRange] = useState<{ from: dayjs.Dayjs; to: dayjs.Dayjs } | null>(null);

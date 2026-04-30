@@ -7,8 +7,8 @@ export default {
     extend: {},
   },
   plugins: [],
+  // 对于库构建，禁用 preflight 避免影响用户项目样式
   corePlugins: {
-    // 禁用不需要的插件以减小 CSS 大小
-    preflight: false, // 禁用 Tailwind 的重置样式
+    preflight: false,
   },
 }

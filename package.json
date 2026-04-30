@@ -1,1 +1,69 @@
-{"name":"grafana-date-picker","version":"1.0.0","type":"module","private":true,"dependencies":{"dayjs":"^1.11.20","lucide-react":"^0.294.0","react":"^18.2.0","react-dom":"^18.2.0"},"devDependencies":{"@types/react":"^18.2.37","@types/react-dom":"^18.2.15","@vitejs/plugin-react":"^4.1.1","autoprefixer":"^10.4.16","postcss":"^8.4.31","tailwindcss":"^3.3.5","typescript":"^5.2.2","vite":"^4.5.0"},"scripts":{"dev":"vite","build":"tsc && vite build","preview":"vite preview"}}
+{
+  "name": "grafana-date-picker",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A powerful React date range picker inspired by Grafana",
+  "main": "dist/grafana-date-picker.umd.js",
+  "module": "dist/grafana-date-picker.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/grafana-date-picker.es.js",
+      "require": "./dist/grafana-date-picker.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "keywords": [
+    "react",
+    "date-picker",
+    "date-range",
+    "grafana",
+    "typescript",
+    "dayjs"
+  ],
+  "author": "Claude",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/grafana-date-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/grafana-date-picker/issues"
+  },
+  "homepage": "https://yourusername.github.io/grafana-date-picker",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.20",
+    "lucide-react": "^0.294.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.1.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vite-plugin-dts": "^3.9.1",
+    "vite-plugin-purgecss": "^0.2.13"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:lib": "vite build --mode lib",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build:lib && npm run build:types",
+    "publish:lib": "node scripts/publish.js"
+  }
+}

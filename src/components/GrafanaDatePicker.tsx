@@ -22,7 +22,7 @@ interface QuickOption {
   display: string;
 }
 
-interface DatePickerProps {
+export interface DatePickerProps {
   value?: { from: Dayjs; to: Dayjs };
   onChange?: (range: { from: Dayjs; to: Dayjs }) => void;
   placeholder?: string;
@@ -31,7 +31,7 @@ interface DatePickerProps {
   className?: string;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({
+const GrafanaDatePicker: React.FC<DatePickerProps> = ({
   value,
   onChange,
   placeholder = '选择日期范围',
@@ -624,4 +624,4 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 };
 
-export default DatePicker;
+export default GrafanaDatePicker;
