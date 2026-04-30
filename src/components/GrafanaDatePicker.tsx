@@ -303,7 +303,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     const startDate = monthStart.startOf('week');
     const endDate = monthEnd.endOf('week');
 
-    const days = [];
+    const days: Dayjs[] = [];
     let day = startDate;
 
     while (day.isBefore(endDate) || day.isSame(endDate)) {
@@ -311,7 +311,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       day = day.add(1, 'day');
     }
 
-    const weeks = [];
+    const weeks: Dayjs[][] = [];
     for (let i = 0; i < days.length; i += 7) {
       weeks.push(days.slice(i, i + 7));
     }
