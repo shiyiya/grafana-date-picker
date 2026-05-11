@@ -1,0 +1,100 @@
+name: Version Check and Auto Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  version-check:
+    name: Check for version changes
+    runs-on: ubuntu-latest
+    outputs:
+      version-changed: ${{ steps.check.outputs.changed }}
+      new-version: ${{ steps.check.outputs.new-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check version change
+        id: check
+        run: |
+          # Get current version from package.json
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+
+          # Get previous version from last commit
+          git checkout HEAD~1 -- package.json
+          PREVIOUS_VERSION=$(node -p "require('./package.json').version")
+
+          echo "Current version: $CURRENT_VERSION"
+          echo "Previous version: $PREVIOUS_VERSION"
+
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "Version changed!"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "new-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "Version not changed"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  release:
+    name: Create Release and Publish
+    needs: version-check
+    if: needs.version-check.outputs.version-changed == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Use token with push permissions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build package
+        run: pnpm run build:lib && pnpm run build:types
+
+      - name: Create and push tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v${{ needs.version-check.outputs.new-version }}" -m "Release v${{ needs.version-check.outputs.new-version }}"
+          git push origin "v${{ needs.version-check.outputs.new-version }}"
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ needs.version-check.outputs.new-version }}
+          release_name: Release v${{ needs.version-check.outputs.new-version }}
+          body: |
+            ## Release v${{ needs.version-check.outputs.new-version }}
+
+            ### Changes
+            Check the commits since last release for details.
+          draft: false
+          prerelease: false
+
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
