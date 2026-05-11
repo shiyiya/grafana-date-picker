@@ -29,12 +29,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/grafana-date-picker.git"
+    "url": "https://github.com/shiyiya/grafana-date-picker.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/grafana-date-picker/issues"
+    "url": "https://github.com/shiyiya/grafana-date-picker/issues"
   },
-  "homepage": "https://yourusername.github.io/grafana-date-picker",
+  "homepage": "https://shiyiya.github.io/grafana-date-picker",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"

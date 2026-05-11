@@ -8,7 +8,5 @@ export default {
   },
   plugins: [],
   corePlugins: {
-    // 禁用不需要的插件以减小 CSS 大小
-    preflight: false, // 禁用 Tailwind 的重置样式
   },
 }

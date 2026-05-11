@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
           },
           sourcemap: true,
           emptyOutDir: true,
-          cssCodeSplit: false, // 将所有CSS打包到一个文件
+          // cssCodeSplit: false, // 将所有CSS打包到一个文件
         }
       : {
           outDir: "dist",
