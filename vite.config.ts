@@ -18,11 +18,19 @@ export default defineConfig(({ mode }) => {
             fileName: (format) => `grafana-date-picker.${format}.js`,
           },
           rollupOptions: {
-            external: ["react", "react-dom", "dayjs", "lucide-react"],
+            external: [
+              "react",
+              "react-dom",
+              "react/jsx-runtime",
+              "dayjs",
+              "lucide-react",
+              /@babel\/runtime/,
+            ],
             output: {
               globals: {
                 react: "React",
                 "react-dom": "ReactDOM",
+                "react/jsx-runtime": "jsxRuntime",
                 dayjs: "dayjs",
                 "lucide-react": "LucideReact",
               },
@@ -38,6 +46,7 @@ export default defineConfig(({ mode }) => {
           sourcemap: true,
           emptyOutDir: true,
           // cssCodeSplit: false, // 将所有CSS打包到一个文件
+          target: "esnext", // 确保使用现代 ES 特性
         }
       : {
           outDir: "dist",
