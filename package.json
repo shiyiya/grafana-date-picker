@@ -1,6 +1,6 @@
 {
   "name": "grafana-date-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "A powerful React date range picker inspired by Grafana",
   "main": "dist/grafana-date-picker.umd.js",
