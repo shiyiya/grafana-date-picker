@@ -102,6 +102,30 @@ const GrafanaDatePicker: React.FC<DatePickerProps> = ({
       display: 'Now-24h to Now'
     },
     {
+      label: '最近3天',
+      from: () => dayjs().subtract(2, 'day').startOf('day'),
+      to: () => dayjs().endOf('day'),
+      display: 'Last 3 days'
+    },
+    {
+      label: '最近7天',
+      from: () => dayjs().subtract(6, 'day').startOf('day'),
+      to: () => dayjs().endOf('day'),
+      display: 'Last 7 days'
+    },
+    {
+      label: '最近30天',
+      from: () => dayjs().subtract(29, 'day').startOf('day'),
+      to: () => dayjs().endOf('day'),
+      display: 'Last 30 days'
+    },
+    {
+      label: '最近90天',
+      from: () => dayjs().subtract(89, 'day').startOf('day'),
+      to: () => dayjs().endOf('day'),
+      display: 'Last 90 days'
+    },
+    {
       label: '今天',
       from: () => dayjs().startOf('day'),
       to: () => dayjs().endOf('day'),
@@ -148,30 +172,6 @@ const GrafanaDatePicker: React.FC<DatePickerProps> = ({
       from: () => dayjs().subtract(1, 'year').startOf('year'),
       to: () => dayjs().subtract(1, 'year').endOf('year'),
       display: 'Last year'
-    },
-    {
-      label: '最近3天',
-      from: () => dayjs().subtract(2, 'day').startOf('day'),
-      to: () => dayjs().endOf('day'),
-      display: 'Last 3 days'
-    },
-    {
-      label: '最近7天',
-      from: () => dayjs().subtract(6, 'day').startOf('day'),
-      to: () => dayjs().endOf('day'),
-      display: 'Last 7 days'
-    },
-    {
-      label: '最近30天',
-      from: () => dayjs().subtract(29, 'day').startOf('day'),
-      to: () => dayjs().endOf('day'),
-      display: 'Last 30 days'
-    },
-    {
-      label: '最近90天',
-      from: () => dayjs().subtract(89, 'day').startOf('day'),
-      to: () => dayjs().endOf('day'),
-      display: 'Last 90 days'
     }
   ];
 
@@ -442,7 +442,7 @@ const GrafanaDatePicker: React.FC<DatePickerProps> = ({
                   <div className="text-xs font-medium text-gray-500 uppercase tracking-wider px-2 py-1">
                     Common
                   </div>
-                  {quickOptions.slice(0, 8).map(option => (
+                  {quickOptions.slice(0, 12).map(option => (
                     <button
                       key={option.label}
                       onClick={() => handleQuickSelect(option)}
@@ -458,7 +458,7 @@ const GrafanaDatePicker: React.FC<DatePickerProps> = ({
                   <div className="text-xs font-medium text-gray-500 uppercase tracking-wider px-2 py-1 mt-4">
                     By day
                   </div>
-                  {quickOptions.slice(8, 15).map(option => (
+                  {quickOptions.slice(12, 19).map(option => (
                     <button
                       key={option.label}
                       onClick={() => handleQuickSelect(option)}
@@ -471,22 +471,7 @@ const GrafanaDatePicker: React.FC<DatePickerProps> = ({
                     </button>
                   ))}
 
-                  <div className="text-xs font-medium text-gray-500 uppercase tracking-wider px-2 py-1 mt-4">
-                    By period
-                  </div>
-                  {quickOptions.slice(15).map(option => (
-                    <button
-                      key={option.label}
-                      onClick={() => handleQuickSelect(option)}
-                      className="w-full px-2 py-1.5 text-left text-sm hover:bg-gray-100 rounded flex items-center justify-between group"
-                    >
-                      <span>{option.label}</span>
-                      <span className="text-xs text-gray-500 group-hover:text-gray-700">
-                        {option.display}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                                  </div>
               )}
 
               {selectedTab === 'absolute' && (
