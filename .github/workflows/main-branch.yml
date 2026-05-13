@@ -1,0 +1,86 @@
+name: Main Branch Processing
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version-changed: ${{ steps.diff.outputs.changed }}
+      new-version: ${{ steps.diff.outputs.new-version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if version changed
+        id: diff
+        run: |
+          # Get current version
+          CURRENT=$(node -p "require('./package.json').version")
+          echo "current-version=$CURRENT" >> $GITHUB_OUTPUT
+
+          # Get previous version
+          if git show HEAD~1:package.json >/dev/null 2>&1; then
+            PREVIOUS=$(git show HEAD~1:package.json | node -p "require('/dev/stdin').version")
+            echo "previous-version=$PREVIOUS" >> $GITHUB_OUTPUT
+          else
+            echo "previous-version=none" >> $GITHUB_OUTPUT
+            PREVIOUS="none"
+          fi
+
+          # Compare versions
+          if [ "$CURRENT" != "$PREVIOUS" ]; then
+            echo "Version changed from $PREVIOUS to $CURRENT"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "new-version=$CURRENT" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-process:
+    needs: check-version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Build library for publishing
+      - name: Build Library
+        run: npm run build:lib && npm run build:types
+
+      # Build demo for deployment
+      - name: Build Demo
+        run: npm run build
+
+      # Publish if version changed
+      - name: Publish to NPM
+        if: needs.check-version.outputs.version-changed == 'true'
+        run: npm publish --tag ${{ contains(needs.check-version.outputs.new-version, '-') && 'next' || 'latest' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Deploy demo to GitHub Pages (always deploy if build succeeded)
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
