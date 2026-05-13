@@ -29,7 +29,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shiyiya/grafana-date-picker.git"
+    "url": "git+https://github.com/shiyiya/grafana-date-picker.git"
   },
   "bugs": {
     "url": "https://github.com/shiyiya/grafana-date-picker/issues"
