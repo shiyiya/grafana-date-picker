@@ -24,8 +24,11 @@ jobs:
 
           # Get previous version
           if git show HEAD~1:package.json >/dev/null 2>&1; then
-            PREVIOUS=$(git show HEAD~1:package.json | node -p "require('/dev/stdin').version")
+            # Create a temporary file to store the previous package.json
+            git show HEAD~1:package.json > /tmp/prev-package.json
+            PREVIOUS=$(node -p "require('/tmp/prev-package.json').version")
             echo "previous-version=$PREVIOUS" >> $GITHUB_OUTPUT
+            rm /tmp/prev-package.json
           else
             echo "previous-version=none" >> $GITHUB_OUTPUT
             PREVIOUS="none"
