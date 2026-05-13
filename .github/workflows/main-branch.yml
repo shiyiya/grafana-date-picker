@@ -59,7 +59,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - run: npm ci
+      - run: npm ci --include=optional
 
       # Build library for publishing
       - name: Build Library
